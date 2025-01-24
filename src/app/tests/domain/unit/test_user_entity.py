@@ -17,3 +17,9 @@ class TestUser:
     def test_user_id_validation(self):
         with pytest.raises(Exception, match="Id must be an UUID"):
             User(id="id_invalido", name="Gabriel")
+
+    # TESTE PARA VALIDAÇÃO DO NOME DO USUÁRIO
+    def test_user_name_validation(self):
+        user_id = uuid4()
+        with pytest.raises(Exception, match="Name is required"):
+            User(id=user_id, name="")

@@ -13,6 +13,9 @@ class User:
     def validate(self):
         if not isinstance(self.id, UUID):
             raise Exception("Id must be an UUID")
+        
+        if not isinstance(self.name, str) or len(self.name) == 0 :
+            raise Exception("Name is required")
 
 # user = User(id=uuid4(), name="Maria")
 
