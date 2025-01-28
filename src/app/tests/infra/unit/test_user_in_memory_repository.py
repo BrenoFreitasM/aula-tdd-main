@@ -1,4 +1,4 @@
-# Aula 01:34:52
+# Aula 01:56:52
 from domain.user.user_entity import User
 from uuid import uuid4
 from infra.user.in_memory_user_repository import InMemoryUserRepository
@@ -26,3 +26,53 @@ class TestSaveUser:
         assert len(repository.users) == 2
         assert repository.users[0] == user1
         assert repository.users[1] == user2
+
+class TestGetUserById:
+
+    # TESTAR SE É POSSÍVEL RETORNAR UM USUÁRIO PELO ID DELE
+    def test_can_get_user_by_id(self):
+        repository = InMemoryUserRepository()
+        user1 = User(id=uuid4(), name="João")
+        user2 = User(id=uuid4(), name="Emidio")
+
+        repository.save(user1)
+        repository.save(user2)
+
+        # retornar o usuário 1 pelo seu id
+        user = repository.get_by_id(user1.id)
+
+        # verifico se eu retorno o mesmo usuário
+        assert user.id == user1.id
+        assert user.name == user1.name
+    
+    # TESTAR SE O METÓDO get_by_id  RETORNA UMA OBJETO VAZIO CASO NÃO EXISTA O USUÁRIO NO REPOSITÓRIO
+    def test_when_user_does_not_exist_should_return_none(self):
+        repository = InMemoryUserRepository()
+        user1 = User(id=uuid4(), name="João")
+        user2 = User(id=uuid4(), name="Emidio")
+
+        repository.save(user1)
+        repository.save(user2)
+
+        user = repository.get_by_id(user_id=uuid4())
+
+        assert user == None
+
+class TestUpdateUser:
+
+    # TESTAR SE É POSSÍVEL ATUALIZAR O NOME DE UM USUÁRIO
+    def test_update_user(self):
+        repository = InMemoryUserRepository()
+        user1 = User(id=uuid4(), name="João")
+        user2 = User(id=uuid4(), name="Emidio")
+
+        repository.save(user1)
+        repository.save(user2)
+
+        # atualizando o nome do usuário João
+        user1.name = "Matheus"
+        repository.update(user1)
+
+        updated_user = repository.get_by_id(user_id=user1.id)
+
+        assert updated_user.name == "Matheus"
